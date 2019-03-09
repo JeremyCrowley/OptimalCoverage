@@ -1,0 +1,67 @@
+\begin{thebibliography}{10}
+
+\bibitem{rout}
+M.~Rout and R.~Roy, ``Dynamic deployment of randomly deployed mobile sensor
+  nodes in the presence of obstacles,'' {\em Ad Hoc Networks}, vol.~46, pp.~12
+  -- 22, 2016.
+
+\bibitem{zhong}
+M.~Zhong and C.~G. Cassandras, ``Distributed coverage control in sensor network
+  environments with polygonal obstacles,'' {\em IFAC Proceedings Volumes},
+  vol.~41, pp.~4162 -- 4167, 2008.
+\newblock 17th IFAC World Congress.
+
+\bibitem{lindhe}
+M.~Lindhe, P.~Ogren, and K.~H. Johansson, ``Flocking with obstacle avoidance: A
+  new distributed coordination algorithm based on voronoi partitions,'' in {\em
+  Proceedings of the 2005 IEEE International Conference on Robotics and
+  Automation}, pp.~1785--1790, April 2005.
+
+\bibitem{franco}
+C.~Franco, D.~M. Stipanović, G.~López-Nicolás, C.~Sagüés, and S.~Llorente,
+  ``Persistent coverage control for a team of agents with collision
+  avoidance,'' {\em European Journal of Control}, vol.~22, pp.~30 -- 45, 2015.
+
+\bibitem{kamon}
+I.~Kamon, E.~Rimon, and E.~Rivlin, ``Tangentbug: A range-sensor-based
+  navigation algorithm,'' {\em The International Journal of Robotics Research},
+  vol.~17, pp.~934--953, 1998.
+
+\bibitem{girard}
+A.~Girard, C.~L. Guernic, and O.~Maler, ``Efficient computation of reachable
+  sets of linear time-invariant systems with inputs,'' in {\em Hybrid Systems:
+  Computation and Control}, (Berlin, Heidelberg), pp.~257--271, Springer Berlin
+  Heidelberg, 2006.
+
+\bibitem{nguyen}
+M.T.Nguyen, C.StoicaManiu, and S.Olaru, ``Optimization-based control for
+  multi-agent deployment via dynamic voronoi partition,'' {\em
+  IFAC-PapersOnLine}, vol.~50, pp.~1828 -- 1833, 2017.
+\newblock 20th IFAC World Congress.
+
+\bibitem{park}
+J.-M. Park, D.-W. Kim, Y.~Yoon, H.~J~Kim, and K.-S. Yi, ``Obstacle avoidance of
+  autonomous vehicles based on model predictive control,'' {\em Proceedings of
+  The Institution of Mechanical Engineers Part D-journal of Automobile
+  Engineering - PROC INST MECH ENG D-J AUTO}, vol.~223, pp.~1499--1516, 12
+  2009.
+
+\bibitem{ferarri}
+G.~Ferrari-Trecate, L.~Galbusera, M.~P.~E. Marciandi, and R.~Scattolini, ``A
+  model predictive control scheme for consensus in multi-agent systems with
+  single-integrator dynamics and input constraints,'' in {\em 2007 46th IEEE
+  Conference on Decision and Control}, pp.~1492--1497, Dec 2007.
+
+\bibitem{mohseni1}
+F.~Mohseni, A.~Doustmohammadi, and M.~bagher Menhaj, ``Distributed receding
+  horizon coverage control for multiple non-holonomic mobile robots,'' {\em
+  IFAC Proceedings Volumes}, vol.~45, pp.~97 -- 102, 2012.
+\newblock 11th IFAC,IEEE International Conference on Programmable Devices and
+  Embedded Systems.
+
+\bibitem{mohseni2}
+F.~Mohseni, A.~Doustmohammadi, and M.~bagher Menhaj, ``Distributed model
+  predictive coverage control for decoupled mobile robots,'' {\em Robotica},
+  vol.~-1, 11 2015.
+
+\end{thebibliography}

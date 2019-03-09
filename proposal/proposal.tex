@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{amsfonts}
+\usepackage[margin=1.5in]{geometry}
+\usepackage[ruled,vlined,linesnumbered,noresetcount]{algorithm2e}
+
+\begin{document}
+
+\title{Coverage Control in the Presence of Dynamic and Adversarial Obstacles}
+\author{Jeremy Crowley}
+
+\maketitle
+
+\section{Related Work}
+
+Coverage control provides a versatile and elegant solution to deploying multiple agents to maximize coverage within a subspace in a distributed fashion. Distributed coverage algorithms are robust to failures in individual agents and unknown environments due to the generality of the distributed framework. \cite{rout} and \cite{zhong} expand on the coverage control problem by adding static polygonal obstacles in the environment that complicate the coverage space and restrict communication between agents. This analysis is limited to a static environment. \cite{lindhe} analyzes a static environment as well, but the agents use a voronoi based distributed control algorithm to collectively reach a target. This presents a scenario where a larger focus on obstacle avoidance is needed for the flock to safely and effectively navigate around an obstacle. In \cite{franco}, a similar problem is presented with the difference that agents may have unique targets, introducing potential scenarios where selecting greedy actions by individual agents can lead to unstable behavior and undesirable equilibrium points. The authors focus on a modified tangent-bug algorithm, the original was presented by \cite{kamon}, that address this issue.
+
+The current literature fails to address a distributed control problem in adversarial environments where dynamic obstacles are present. Exact prediction of an adversarial obstacle's state can be impossible without knowledge of the underlying control structure and dynamics of the obstacle. However, with information on the dynamics of the system, a reachability set can be efficiently computed \cite{girard}. An emphasis on efficiency is critical as the reachability set needs to be recomputed often. This reachability set can be used for worst case obstacle avoidance analysis in the case where the constraints are well estimated. 
+
+In dynamic environments, especially adversarial environments, planning a trajectory requires additional logic to predict and account for possible future states. Model predictive control (MPC) offers a method to generate safe and optimal trajectories under a set of constraints. \cite{nguyen} uses an optimization based trajectory planning algorithm for a the coverage problem. Each agents waypoint is determined with voronoi decomposition to decrease computational complexity.  \cite{park} applies MPC to a ground vehicle to formulate an obstacle avoidance scheme. Due to the computational load of calculating optimal trajectories with complex non-linear models, the trajectory planning was executed separately from the tracking. Applying MPC strategies to the distributed consensus problem, \cite{ferarri} is able to guarantee consensus under certain connectivity assumptions for the communication graph. \cite{mohseni1} and \cite{mohseni2} show promising results for a distributed MPC scheme to the standard coverage control problem and a Lyapunov like proof in \cite{mohseni2} is presented to show stability of the distributed system. In distributed robotic systems where computational power is limited, MPC poses a threat of computational overload. As seen in \cite{nguyen} and \cite{park}, measures are taken to avoid performing all computations with optimization based techniques. With simple models (i.e. single integrator) and reasonable constraints, the computational load can be significantly decreased. 
+
+
+
+
+
+\section{Problem}
+
+In large scale disasters, emergency services teams are overloaded and are required to work with limited information about the dangerous environment they are entering. Locating and monitoring survivors is a task that is near impossible to handle with a team limited to humans. Deploying multi-agent robotic systems to emergency and disaster situations can help remedy a large set of problems encountered by emergency services. The complex situations described above require careful consideration for dynamic obstacles that compromise individual agents and disturb the multi agent system topology. We can imagine a scenario where a network of agents with limited sensing and communication capabilities are monitoring an area of interest and an obstacle is disrupting the quality of coverage or destroying individual agents. This obstacle can be anything from a falling telephone pole to a malicious vehicle. In these situations, a compromised coverage of the area can lead to catastrophic consequences and should be the top priority for a multi agent system.
+
+I propose a framework for a distributed coverage control algorithm that focuses on safely maintaining maximum coverage of a constrained configuration space while an adversary is actively trying to disrupt coverage. Relevant areas of research include reachability set computation, coverage control, and model predictive control. Specifically, I would like to perform an analysis on the trade off between a simplified computationally efficient predictive coverage control algorithm and a more robust distributed MPC cover control algorithm. For increasingly complex environments, an MPC based strategy is a logical choice as it can handle an extensive range of constraints. The proposed implementation of the two algorithms are discussed below.
+
+Consider a simple multi agent system with single integrator dynamics and range based sensing/communication. This style of model is used in the majority of distributed control problems due to its simplicity. In order to apply MPC, a discretized version of the single integrator will be used to plan and execute trajectories. The coverage problem in an MPC framework can be addressed using a cost function that drives each agent to a maximum distance from neighboring agents while the safety problem can be embedded as a hard constraint in the trajectory optimization. 
+
+It is reasonable to assume the class of an adversarial vehicle (fixed wing aircraft, ground vehicle, etc.) can be extracted from cost efficient sensors and an approximation of the dynamics is available. If the adversary is in sensing distance of an agent, the state can be measured and used to compute a reachability set for a finite time horizon. By treating the reachability set as an obstacle, the dynamics of the multi agent system can be formulated as a standard coverage control problem similar to those in \cite{rout} and \cite{zhong} where static obstacles are considered. This would lead to reasonable coverage results, but fails to leverage the power of predicting the reachability set for each time step and applying MPC to each agent. 
+
+Ideally, more carefully planned trajectories can draw agents toward areas in the configuration space that will be safe in the future, based on predictions of the adversary. This would lead to a more effective coverage control scheme for environments with dynamic and potentially adversarial obstacles. For certain classes of adversaries, such as ground vehicles and fixed wing aircraft, the dynamic constraints of these system can be exploited to identify areas that will be safe in the future. Ground vehicles have maximum deceleration rates and maximum turning rate constraints and fixed wing aircraft have an additional minimum speed constraint. Both of these vehicles are excellent candidates to show how vehicle constraints can be exploited for a maximum coverage control framework. For example, the subspace behind a fixed wing aircraft is guaranteed to be safe (for a finite window of time) due to the minimum speed constraint. The aircraft is required to continue moving forward and can get back to the original position (in minimum time) by flying in a complete circle where the radius is determined by the maximum turning rate. This is particularly useful and can be leveraged to design an algorithm that can maintain a high coverage quality of the constrained configuration space in the presence of dynamic obstacles.
+
+
+
+\section{Algorithms}
+
+The naive predictive coverage algorithm treats the reachability set as a stationary obstacle at each time step. This allows for the safety constraint to be met, but there is room for improvement on the quality of coverage.
+
+\vspace{2mm}
+
+\begin{algorithm}[H]
+\SetAlgoLined 
+	\eIf{adversary in sensing range}{
+ 		compute reachability set\;
+		transmit to neighbors\;
+ 	}{
+		transmit empty message to neighbors\;
+ 	}
+	calculate input with reachability set object\;
+\caption{Naive predictive coverage - input for each agent}
+\end{algorithm}
+
+\vspace{5mm}
+
+The robust predictive coverage algorithm uses model predictive control techniques to maximize coverage. The reachability set at each time step is used to satisfy the safety constraints, allowing for a more informed input calcuation from agents. 
+
+\vspace{2mm}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+    	\eIf{adversary in sensing range}{
+		compute reachability set for each time step\;
+		transmit to neighbors\;
+	}{
+		transmit empty message to neighbors\;
+	}
+	
+	formulate reachability set constraints\;
+	calculate input with MPC\;
+	
+ \caption{Robust predictive coverage  - input for each agent}
+\end{algorithm}
+
+\vspace{5mm}
+
+The difference between the two is in how the reachability set is treated. Recognizing that the reachability set is different for each time step allows the robust algorithm to exploit subspaces that are guaranteed to be safe within subsets of the prediction horizon.
+
+\bibliographystyle{ieeetr}
+\bibliography{biblio}
+
+\end{document}
