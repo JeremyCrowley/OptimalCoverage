@@ -33,6 +33,7 @@ function c = costCoverage(x0, u, ts, L, node, g, gSim, config, senseR)
             G = [x(:,end)', senseR; t(:,end)', senseR];
             M = area_intersect_circle_analytical(G); 
             c = c + M(1,2) + 1/M(1,2);
+            %c = c + M(1,2);
             
         end
     end

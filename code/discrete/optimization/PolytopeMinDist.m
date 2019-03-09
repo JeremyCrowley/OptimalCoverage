@@ -11,7 +11,19 @@ function minDist = PolytopeMinDist(X1,X2,options)
     % get sizes of vertices for polytopes
     [m1,n1] = size(X1);
     [m2,n2] = size(X2);
-    
+
+    % odd bug, polytope min dist needs two points in set
+    if(n1 == 1)
+        X1 = [X1 X1];
+    end
+
+    if(n2 == 1)
+        X2 = [X2 X2];
+    end
+    [m1,n1] = size(X1);
+    [m2,n2] = size(X2);
+
+    % make sure dimensions of polytopes match
     if(m1 ~= m2)
         error('USER ERROR: Dimensions mistmatch');
     end

@@ -17,11 +17,11 @@ function [u,gUpdated] = optimalInputCoverage(x0, N, ts, L, uGuess, nodes, config
     
     % upper and lower bounds 
     [m,n] = size(x0);
-    lb = -1*ones(1,m);
-    ub = 1*ones(1,m);
+    lb = -2*ones(1,m);
+    ub = 2*ones(1,m);
 
     % solve optimization
-    options = optimoptions('fmincon','Display','notify-detailed','algorithm','active-set','MaxFunEvals',3000,'ConstraintTolerance',1e-04);
+    options = optimoptions('fmincon','Display','notify-detailed','algorithm','active-set','MaxFunEvals',3000,'ConstraintTolerance',1e-02);
     
     % with constraints
     polyOptions = optimoptions('fmincon','Display','notify-detailed','algorithm','active-set');
@@ -54,6 +54,9 @@ function [u,gUpdated] = optimalInputCoverage(x0, N, ts, L, uGuess, nodes, config
             xCurArr = cell2mat(g.Nodes.trajectory(j));
             xCur = xCurArr(:,end);
             
+            %i
+            %size(xCurArr);
+            
             % configuration space upper and lower bound
             b(1) = config(2)-xCur(1);
             b(2) = config(4)-xCur(2);
@@ -68,11 +71,17 @@ function [u,gUpdated] = optimalInputCoverage(x0, N, ts, L, uGuess, nodes, config
             %    uGuess,A,b,Aeq,beq,lb,ub,...
             %    [],options);
             
-            % non linear constraint
+            % non linear constraint, full reach set
+            %[uopt ,fval,exitflag,output] = ...
+            %    fmincon(@(u) costCoverage(xCur,u,ts,L,j,g,gPrediction,config,senseR),...
+            %    uGuess,A,b,Aeq,beq,lb,ub,...
+            %    @(u) ObstConstraint(xCur, u, ts, xObst, threshold, polyOptions),options);
+            
+            % non linear constraint, time step reach set
             [uopt ,fval,exitflag,output] = ...
                 fmincon(@(u) costCoverage(xCur,u,ts,L,j,g,gPrediction,config,senseR),...
                 uGuess,A,b,Aeq,beq,lb,ub,...
-                @(u) ObstConstraint(xCur, u, ts, xObst, threshold, polyOptions),options);
+                @(u) ObstConstraint(xCur, u, ts, xObst(:,:,i), threshold, polyOptions),options);
             
             
             % store input
